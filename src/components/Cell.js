@@ -1,4 +1,5 @@
-import style from "./global.module.css";
+import style from "../global.module.css";
+import React from 'react'
 
 function Cell(prop) {
   const { mine, hidden, reveal, BombCount, flagged, setFlag } = prop;
@@ -14,9 +15,6 @@ function Cell(prop) {
       onClick={reveal}
       onContextMenu={(e) => setFlag(e)}
       className={classname}
-      onMouseDown={()=> false}
-      onSelect={()=> false}
-      onSelectCapture={()=> false}
     >
       {mine ? "" : hidden ? "" : BombCount ? BombCount : ""}
     </div>

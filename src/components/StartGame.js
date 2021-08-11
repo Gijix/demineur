@@ -1,11 +1,13 @@
 import createGrid from '../createGrid'
+import style from '../global.module.css'
 
 
-export default function StartGame({setGrid,game,setGame}){
+export default function StartGame({setBomb,setGrid,game,setGame,size,totalBomb}){
     const buttonName = game !== "playing" ? "start game" : "restart the game"
     const restart = () => {
         setGame("playing")
-        setGrid(createGrid())
+        setBomb(totalBomb)
+        setGrid(createGrid(size,totalBomb))
     }
-    return(<button onClick={restart}>{buttonName}</button>)
+    return(<button className={style.startButton} onClick={restart}>{buttonName}</button>)
 }

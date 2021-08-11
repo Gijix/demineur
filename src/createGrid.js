@@ -2,19 +2,13 @@
  * @typedef cas
  * @property {boolean} mine
  * @property {boolean} hidden
+ * @property {boolean} flagged
  */
-const SIZE = 16;
-const BOMB = 40;
-function getCoor() {
-  return Math.floor(Math.random() * SIZE);
+function getCoor(size) {
+  return Math.floor(Math.random() * size);
 }
-/**
- *
- * @param {number} x
- * @param {number} y
- */
-const getAdjacent = (x, y, grid) => {
-  const size = SIZE - 1;
+const getAdjacent = (x, y, grid,size) => {
+  const SIZE = size - 1;
   let result = [
     { x: x - 1, y: y - 1 },
     { x: x + 1, y: y + 1 },
@@ -26,7 +20,7 @@ const getAdjacent = (x, y, grid) => {
     { x: x, y: y + 1 },
   ];
   result = result.filter(
-    (coor) => coor.x >= 0 && coor.x <= size && coor.y >= 0 && coor.y <= size
+    (coor) => coor.x >= 0 && coor.x <= SIZE && coor.y >= 0 && coor.y <= SIZE
   );
   let count = 0;
   result.forEach((adj) => {
@@ -37,19 +31,25 @@ const getAdjacent = (x, y, grid) => {
 
   return { adj: result, BombCount: count };
 };
-export default function createGrid() {
+/**
+ * 
+ * @param {number} size 
+ * @param {number} bomb 
+ * @returns {cas[][]}
+ */
+export default function createGrid(size,bomb) {
   /**
    * @type {cas[][]}
    */
-  let grid = Array.from(Array(SIZE), () =>
-    [...new Array(SIZE)].map((x) => (x = { mine: false, hidden: true,flagged:false }))
+  let grid = Array.from(Array(size), () =>
+    [...new Array(size)].map((x) => (x = { mine: false, hidden: true,flagged:false }))
   );
-  for (let i = 0; i < BOMB; i++) {
-    let x = getCoor();
-    let y = getCoor();
+  for (let i = 0; i < bomb; i++) {
+    let x = getCoor(size);
+    let y = getCoor(size);
     while (grid[x][y].mine === true) {
-      x = getCoor();
-      y = getCoor();
+      x = getCoor(size);
+      y = getCoor(size);
     }
     grid[x][y].mine = true;
   }
@@ -59,8 +59,8 @@ export default function createGrid() {
       (cas, i) =>
         (cas = {
           ...cas,
-          adj: getAdjacent(j, i, tab).adj,
-          BombCount: getAdjacent(j, i, tab).BombCount,
+          adj: getAdjacent(j, i, tab,size).adj,
+          BombCount: getAdjacent(j, i, tab,size).BombCount,
         })
     )
   );

@@ -1,8 +1,8 @@
 import Cell from "./Cell";
-import style from "./global.module.css";
+import style from "../global.module.css";
 import React from "react";
 
-export default function Grid({ grid, setGrid, game, setGame }) {
+export default function Grid({ grid, setGrid, game, setGame, setBomb }) {
   const checkGrid = () => {
     if (
       grid.every((col) =>
@@ -40,6 +40,9 @@ export default function Grid({ grid, setGrid, game, setGame }) {
     let clonedGrid = [...grid];
     clonedGrid[j][i].flagged = !clonedGrid[j][i].flagged;
     setGrid(clonedGrid);
+    clonedGrid[j][i].flagged
+      ? setBomb((prev) => prev - 1)
+      : setBomb((prev) => prev + 1);
   };
   return (
     <div className={style.grid}>
